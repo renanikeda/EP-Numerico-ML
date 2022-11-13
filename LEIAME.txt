@@ -1,0 +1,16 @@
+EP1 MAP3121 MACHINE LEARNING
+Email: renan.ikeda@usp.br
+Nome: Renan Ikeda Fernandes
+Nusp: 10439892
+Nome: Vinicius de Barros Silva
+Nusp: 10335913
+Data: 19/05/2019
+Turma: 01, professor Alexandre Roma
+
+Compilador: Code::Blocks versão 17.12 Windows 10.
+
+Abrir a pasta "EP" e em seguida o arquivo "EP1_numerico.c" no CodeBlocks 17.12, compilar e executar, inserir numero "p", "ndig_treino" e "n_test".
+
+OBS IMPORTANTE: Para conseguir rodar o programa corretamente é preciso incluir os arquivos .txt de dados mnist na pasta EP juntamente com o código "EP1_numerico.c".
+
+O pdf do relatório se encontra nessa mesma pasta do LEIAME com o nome "EP_MAP3121.pdf".
