@@ -26,7 +26,7 @@ void imprimimatriz(float **A,int n,int m){
     printf("\n");
 }
 float cgivens(float wik, float wjk){
-// Calcula o cosseno que será usado narotação a partir dos wik e wjk
+// Calcula o cosseno que será usado na rotação a partir dos wik e wjk
     float ta,c,aux;
     if(fabs(wik)>fabs(wjk)){
         ta=(-wjk/wik);
@@ -40,7 +40,7 @@ float cgivens(float wik, float wjk){
 return c;
 }
 float sgivens(float wik,float wjk){
-// Calcula o seno que será usado narotação a partir dos wik e wjk
+// Calcula o seno que será usado na rotação a partir dos wik e wjk
     float ta,s,aux;
     if(fabs(wik)>fabs(wjk)){
         ta=(-wjk/wik);
@@ -54,7 +54,7 @@ float sgivens(float wik,float wjk){
 return s;
 }
 void rotgivens(float **W,float **A,float c,float s,int i,int j,int k,int n,int m, int p){
-// Faz a rotação para as linhas i e j
+// Faz a rotação para as linhas i e j nas matrizes W e A
     int r;
     float aux,aux2;
     for(r=k;r<p;r++){
@@ -69,7 +69,8 @@ void rotgivens(float **W,float **A,float c,float s,int i,int j,int k,int n,int m
     }
 }
 void escalonar(float **W, float **A,int n,int m,int p){
-// Faz o escalonamento do sistema A = WH chamando a rotgivens
+// Faz o escalonamento do sistema A = WH chamando a rotgivens, em cada coluna k se passa por todas suas linhas
+//efetuando a rotação de forma a escalonar a matriz
     int k,i,j;
     float c,s;
     for(k=0;k<p;k++){
@@ -106,7 +107,7 @@ void solve(float **R,float **H,float **A,int n,int m,int p){
     }
 }
 void transposta(float **ATUAL,float **NOVA,int n,int m){
-// Calcula a matriz transposta de ATUAL
+// Calcula a matriz transposta de ATUAL e armazena na matriz NOVA
     int i,j,k;
     float aux;
     for(i=0;i<n;i++){
@@ -214,20 +215,20 @@ void minimosquadradosalternados(float **W,float **H,float **A, float **Wt,float 
     for(iter=0;iter<itermax && epsilon>1.0/100000;iter++){
     normalizar(W,n,p);
     copiamatriz(A,T,n,ndig_treino);
-    escalonar(W,A,n,ndig_treino,p);
+    escalonar(W,A,n,ndig_treino,p);  // resolve em mínimos quadrados para achar a matriz H
     solve(W,H,A,n,ndig_treino,p);
-    redefinir(H,p,ndig_treino);
+    redefinir(H,p,ndig_treino);      // redefine a matriz H com Hij = max{0,hij}
     transposta(T,At,n,ndig_treino);
     transposta(H,Ht,p,ndig_treino);
     transposta(W,Wt,n,p);
-    escalonar(Ht,At,ndig_treino,n,p);
+    escalonar(Ht,At,ndig_treino,n,p); // resolve o sistema transposto para achar a nova matriz W
     solve(Ht,Wt,At,ndig_treino,n,p);
     transposta(Wt,W,p,n);
-    redefinir(W,n,p);
+    redefinir(W,n,p);   // redefine a matriz W com wij = max{0,wij}
     copiamatriz(T,A,n,ndig_treino);
     multiplica(W,H,WH,n,ndig_treino,p);
-    eps2=diff(A,WH,n,ndig_treino);
-    epsilon=fabs(eps1-eps2);
+    eps2=diff(A,WH,n,ndig_treino);  // calcula o erro entre a aproximação WH da matriz A
+    epsilon=fabs(eps1-eps2);  // compara a diferença entre duas iterações para verificar se continuará o laço
     eps1=eps2;
     }
 }
@@ -411,8 +412,8 @@ for(i=0;i<n;i++){
         }
 }
 fclose(arq0);
-minimosquadradosalternados(W0,H,A,Wt,Ht,At,T,WH,n,ndig_treino,p,itermax,epsilon);
-FILE *test0;                          // É chamada a função de minimos quadrados alternados para treinar a matriz Wi
+minimosquadradosalternados(W0,H,A,Wt,Ht,At,T,WH,n,ndig_treino,p,itermax,epsilon); // É chamada a função de minimos quadrados alternados para treinar a matriz Wi
+FILE *test0;
 test0=fopen("test_images.txt", "r");  // Em seguida é lido o .txt dos dígitos de teste, armazenando-os na matriz Teste
 for(i=0;i<n;i++){
     for(j=0;j<n_test;j++){
@@ -420,7 +421,7 @@ for(i=0;i<n;i++){
         }
 }
 fclose(test0);
-normalizarA(Teste,n,ndig_treino);    // Faz a normalização da matriz Teste
+normalizarA(Teste,n,n_test);    // Faz a normalização da matriz Teste
 escalonar(W0,Teste,n,n_test,p);      // Faz o escalonamento da matriz Wi e a matriz Teste
 solve(W0,Hteste,Teste,n,n_test,p);   // Resolve o problema Teste = WiH
 multiplica(W0,Hteste,WHteste,n,n_test,p);
@@ -452,7 +453,7 @@ for(i=0;i<n;i++){
         }
 }
 fclose(test1);
-normalizarA(Teste,n,ndig_treino);
+normalizarA(Teste,n,n_test);
 escalonar(W1,Teste,n,n_test,p);
 solve(W1,Hteste,Teste,n,n_test,p);
 multiplica(W1,Hteste,WHteste,n,n_test,p);
@@ -483,7 +484,7 @@ for(i=0;i<n;i++){
         }
 }
 fclose(test2);
-normalizarA(Teste,n,ndig_treino);
+normalizarA(Teste,n,n_test);
 escalonar(W2,Teste,n,n_test,p);
 solve(W2,Hteste,Teste,n,n_test,p);
 multiplica(W2,Hteste,WHteste,n,n_test,p);
@@ -499,7 +500,7 @@ FILE *arq3;
 arq3=fopen("train_dig3.txt", "r");
 for(i=0;i<n;i++){
     for(j=0;j<m3;j++){
-        if(!fscanf(arq1,"%f", &A[i][j]))
+        if(!fscanf(arq3,"%f", &A[i][j]))
             break;
 
         }
@@ -514,7 +515,7 @@ for(i=0;i<n;i++){
         }
 }
 fclose(test3);
-normalizarA(Teste,n,ndig_treino);
+normalizarA(Teste,n,n_test);
 escalonar(W3,Teste,n,n_test,p);
 solve(W3,Hteste,Teste,n,n_test,p);
 multiplica(W3,Hteste,WHteste,n,n_test,p);
@@ -545,7 +546,7 @@ for(i=0;i<n;i++){
         }
 }
 fclose(test4);
-normalizarA(Teste,n,ndig_treino);
+normalizarA(Teste,n,n_test);
 escalonar(W4,Teste,n,n_test,p);
 solve(W4,Hteste,Teste,n,n_test,p);
 multiplica(W4,Hteste,WHteste,n,n_test,p);
@@ -576,7 +577,7 @@ for(i=0;i<n;i++){
         }
 }
 fclose(test5);
-normalizarA(Teste,n,ndig_treino);
+normalizarA(Teste,n,n_test);
 escalonar(W5,Teste,n,n_test,p);
 solve(W5,Hteste,Teste,n,n_test,p);
 multiplica(W5,Hteste,WHteste,n,n_test,p);
@@ -607,7 +608,7 @@ for(i=0;i<n;i++){
         }
 }
 fclose(test6);
-normalizarA(Teste,n,ndig_treino);
+normalizarA(Teste,n,n_test);
 escalonar(W6,Teste,n,n_test,p);
 solve(W6,Hteste,Teste,n,n_test,p);
 multiplica(W6,Hteste,WHteste,n,n_test,p);
@@ -638,7 +639,7 @@ for(i=0;i<n;i++){
         }
 }
 fclose(test7);
-normalizarA(Teste,n,ndig_treino);
+normalizarA(Teste,n,n_test);
 escalonar(W7,Teste,n,n_test,p);
 solve(W7,Hteste,Teste,n,n_test,p);
 multiplica(W7,Hteste,WHteste,n,n_test,p);
@@ -669,7 +670,7 @@ for(i=0;i<n;i++){
         }
 }
 fclose(test8);
-normalizarA(Teste,n,ndig_treino);
+normalizarA(Teste,n,n_test);
 escalonar(W8,Teste,n,n_test,p);
 solve(W8,Hteste,Teste,n,n_test,p);
 multiplica(W8,Hteste,WHteste,n,n_test,p);
@@ -700,7 +701,7 @@ for(i=0;i<n;i++){
         }
 }
 fclose(test9);
-normalizarA(Teste,n,ndig_treino);
+normalizarA(Teste,n,n_test);
 escalonar(W9,Teste,n,n_test,p);
 solve(W9,Hteste,Teste,n,n_test,p);
 multiplica(W9,Hteste,WHteste,n,n_test,p);

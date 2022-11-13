@@ -7,10 +7,12 @@ Nusp: 10335913
 Data: 19/05/2019
 Turma: 01, professor Alexandre Roma
 
-Compilador: Code::Blocks versão 17.12 Windows 10.
+
+OBS IMPORTANTE: Para conseguir rodar o programa corretamente é preciso incluir os arquivos .txt de dados mnist, que se encontra em https://www.ime.usp.br/~pedrosp/dados_mnist.zip, na pasta "EP", com o código "EP1_numerico.c".
+
+Compilador: Code::Blocks versão 17.12, GNU GCC compiler g++ C/C++11, Windows 10.
+O código está escrito em C.
 
 Abrir a pasta "EP" e em seguida o arquivo "EP1_numerico.c" no CodeBlocks 17.12, compilar e executar, inserir numero "p", "ndig_treino" e "n_test".
-
-OBS IMPORTANTE: Para conseguir rodar o programa corretamente é preciso incluir os arquivos .txt de dados mnist na pasta EP juntamente com o código "EP1_numerico.c".
 
 O pdf do relatório se encontra nessa mesma pasta do LEIAME com o nome "EP_MAP3121.pdf".
